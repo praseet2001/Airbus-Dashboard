@@ -2,6 +2,7 @@ from pdb import run
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+
 # =================================================
 # PAGE CONFIG
 # =================================================
@@ -302,6 +303,9 @@ with right:
         st.markdown('<div class="inner-box">', unsafe_allow_html=True)
 
         st.markdown("### 🔍 Tool Details")
+
+        if st.button("🔄 Refresh Data"):
+            st.cache_data.clear()
 
         selected_tool = st.selectbox(
             "Select Tool",
