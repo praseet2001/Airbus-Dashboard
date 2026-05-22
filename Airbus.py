@@ -306,6 +306,7 @@ with right:
 
         if st.button("🔄 Refresh Data"):
             st.cache_data.clear()
+            st.rerun()
 
         selected_tool = st.selectbox(
             "Select Tool",
