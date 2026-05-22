@@ -176,7 +176,7 @@ governance_filter = c2.multiselect(
 
 with c3:
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔄 Reset"):
+    if st.button("🧹 Reset"):
         st.session_state.reset_trigger += 1
         st.session_state.pop("frozen_governance", None)
         st.rerun()
