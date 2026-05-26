@@ -118,6 +118,7 @@ if "reset_trigger" not in st.session_state:
 
 all_bf = sorted(df["Business Function"].unique())
 all_gov = sorted(df["Governance Group"].unique())
+all_tool_types = sorted(df["BOT/COT/DOT"].unique())
 
 st.markdown("<div style='height:5px;'></div>", unsafe_allow_html=True)
 st.markdown("""
@@ -156,7 +157,8 @@ span[data-baseweb="tag"]:hover {
 
 st.markdown("#### 🔎 Filters")
 
-c1, c2, c3 = st.columns([1.5, 1.5, 0.4])
+# c1, c2, c3 = st.columns([1.5, 1.5, 0.4])
+c1, c2, c3, c4 = st.columns([1.0, 1.7, 0.8, 0.4])
 
 business_function = c1.multiselect(
     "Business Function",
@@ -174,7 +176,14 @@ governance_filter = c2.multiselect(
     key=f"gov_{st.session_state.reset_trigger}"
 )
 
-with c3:
+tool_type_filter = c3.multiselect(
+    "BOT/COT/DOT",
+    all_tool_types,
+    default=all_tool_types,
+    key=f"tool_{st.session_state.reset_trigger}"
+)
+
+with c4:
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🧹 Reset"):
         st.session_state.reset_trigger += 1
@@ -198,9 +207,15 @@ if selection and "points" in selection and len(selection["points"]) > 0:
         st.session_state.reset_trigger += 1
         st.rerun()
 
+# filtered_df = df[
+#     (df["Business Function"].isin(business_function)) &
+#     (df["Governance Group"].isin(governance_filter))
+# ]
+
 filtered_df = df[
     (df["Business Function"].isin(business_function)) &
-    (df["Governance Group"].isin(governance_filter))
+    (df["Governance Group"].isin(governance_filter)) &
+    (df["BOT/COT/DOT"].isin(tool_type_filter))
 ]
 
 if filtered_df.empty:
@@ -292,7 +307,7 @@ with left:
     # ✅ VERY IMPORTANT: render with selection enabled
     st.plotly_chart(
         fig,
-        width="stretch",
+        use_container_width=True,
         key="gov_donut",
         on_select="rerun"
     )
@@ -579,7 +594,7 @@ for i, cat in enumerate(categories):
             height=220
         )
 
-        st.plotly_chart(fig_small, width="stretch")
+        st.plotly_chart(fig_small, use_container_width=True)
         # st.caption(f"{completed} of {total} completed")
 # =================================================
 # LIFECYCLE
@@ -754,7 +769,7 @@ with right_heat:
             coloraxis_showscale=False
         )
 
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 st.divider()
 progress = int(tool["Completion (%)"])
 
